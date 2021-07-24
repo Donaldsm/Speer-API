@@ -1,4 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, PrimaryColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, ManyToMany, JoinTable, OneToMany} from "typeorm";
+import { Message } from "./Message";
+import { Post } from "./Post";
 
 @Entity()
 export class User {
@@ -17,5 +19,12 @@ export class User {
 
     @Column()
     loggedIn: boolean;
+
+    @ManyToMany(() => Message, message => message.participant)
+    @JoinTable()
+    message: Message[];
+
+    @OneToMany(() => Post, post => post.user)
+    posts: Post[];
 
 }
