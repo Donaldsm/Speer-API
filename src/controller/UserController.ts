@@ -1,7 +1,5 @@
 import { getConnection } from "typeorm";
 import { NextFunction, Request, Response } from "express";
-import { close } from "inspector";
-import { Console } from "console";
 
 export class UserController {
     private entitymanager = getConnection().manager;
