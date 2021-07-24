@@ -1,0 +1,46 @@
+CREATE OR REPLACE FUNCTION addUser(email character varying, pass character varying, firstname character varying,
+								  lastname character varying, loggedIn boolean) RETURNS void 
+AS $BODY$
+	BEGIN
+		INSERT INTO "user"("Email", "password", "firstName", "lastName", "loggedIn")
+		VALUES (email, pass, firstname, lastname, loggedIn);
+	END;
+$BODY$ LANGUAGE 'plpgsql' VOLATILE;
+
+CREATE OR REPLACE FUNCTION allUsers() RETURNS table("Email" character varying, "password" character varying, "firstName" character varying, "lastName" character varying, "LoggedIn" boolean)
+AS $BODY$
+	BEGIN
+		RETURN QUERY
+		SELECT * FROM "user";
+	END;
+$BODY$ LANGUAGE 'plpgsql' VOLATILE;
+
+CREATE OR REPLACE FUNCTION loginUser(email character varying, pass character varying)
+RETURNS table("Email" character varying, "password" character varying, "firstName" character varying, "lastName" character varying, "LoggedIn" boolean)
+AS $BODY$
+	BEGIN
+		UPDATE "user" as U
+		SET "loggedIn" = true
+		WHERE email = U."Email" AND pass = U."password";
+		
+		RETURN QUERY
+		SELECT * FROM "user" as D
+		WHERE email = D."Email" AND pass = D."password";
+		
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+
+CREATE OR REPLACE FUNCTION logoutUser(email character varying)
+RETURNS table("Email" character varying, "password" character varying, "firstName" character varying, "lastName" character varying, "LoggedIn" boolean)
+AS $BODY$
+	BEGIN
+		UPDATE "user" as U
+		SET "loggedIn" = false
+		WHERE email = U."Email";
+		
+		RETURN QUERY
+		SELECT * FROM "user" as D
+		WHERE email = D."Email";
+		
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
