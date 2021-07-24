@@ -44,3 +44,84 @@ AS $BODY$
 		
 	 END;
  $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 
+CREATE OR REPLACE FUNCTION addMessage(msg character varying, sender character varying, reciever character varying)
+RETURNS void
+AS $BODY$
+declare msgId integer;
+	BEGIN
+		INSERT INTO "message"("content")
+		VALUES (msg)
+		RETURNING "id" INTO msgId;
+		
+		INSERT INTO "message_participant_user"("messageId", "userEmail")
+		VALUES (msgId, sender);
+		
+		INSERT INTO "message_participant_user"("messageId", "userEmail")
+		VALUES (msgId, reciever);
+
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 
+CREATE OR REPLACE FUNCTION readMessage(email character varying, msgId integer)
+RETURNS void
+AS $BODY$
+	BEGIN
+		INSERT INTO "message_read_user"("messageId", userEmail)
+		VALUES (email, msgId);
+		
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 
+ CREATE OR REPLACE FUNCTION addPost(postContent character varying, poster character varying)
+RETURNS table("id" integer, "content" character varying, "userEmail" character varying)
+AS $BODY$
+declare postid integer;
+	BEGIN
+		INSERT INTO "post"("content", "userEmail")
+		VALUES (postContent, poster)
+		RETURNING "id" INTO postid;
+		
+		RETURN QUERY
+		SELECT * FROM "post" as P
+		WHERE "id = postid";
+
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 
+  CREATE OR REPLACE FUNCTION deletePost(postId integer)
+RETURNS void
+AS $BODY$
+	BEGIN
+		DELETE FROM "post" as P
+		WHERE P."id" = postId;
+
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 
+ CREATE OR REPLACE FUNCTION readPost(postId integer, email character varying)
+RETURNS void
+AS $BODY$
+	BEGIN
+
+		INSERT INTO "post_reader_user"("postId", "userEmail")
+		VALUES (postId, sender);
+		
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 
+CREATE OR REPLACE FUNCTION updatePost(postId integer, cont character varying, email character varying)
+RETURNS table("id" integer, "content" character varying, "userEmail" character varying)
+AS $BODY$
+	BEGIN
+		UPDATE "post" as P
+		SET "content" = cont
+		WHERE email = P."Email" AND postId = P."id";
+		
+		RETURN QUERY
+		SELECT * FROM "psot" as D
+		WHERE email = D."Email" AND postId = D."id";
+		
+	 END;
+ $BODY$ LANGUAGE 'plpgsql' VOLATILE;
+ 

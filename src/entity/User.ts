@@ -8,7 +8,7 @@ export class User {
     @PrimaryColumn()
     Email: string;
     
-    @PrimaryColumn()
+    @Column()
     password: string;
 
     @Column()
@@ -21,10 +21,17 @@ export class User {
     loggedIn: boolean;
 
     @ManyToMany(() => Message, message => message.participant)
-    @JoinTable()
     message: Message[];
 
+    @ManyToMany(() => Message, message => message.reader)
+    messagesRead: Message[];
+
+    @ManyToMany(() => Post, post => post.readers)
+    postsRead: Post[];
+    
     @OneToMany(() => Post, post => post.user)
     posts: Post[];
+
+    
 
 }
