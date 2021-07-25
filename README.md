@@ -14,6 +14,18 @@ To test the API use Postman to query the endpoints. To find the names of the ele
 http://localhost:3030/speer/messages/new
 ```
 
+### Endpoint Controller code:
+```
+    async addMessage(request: Request, reponse: Response, next: NextFunction){
+        console.log(request.body);
+        await this.entitymanager.query(`
+            SELECT * FROM addMessage('${request.body.content}', '${request.body.sender}', '${request.body.reciever}')
+        `);
+        console.log("message sent");
+        return;
+    }
+```
+
 ### JSON  Object:
 ```
 {
