@@ -7,7 +7,7 @@ Steps to run this project:
 3. Go to the `SQL stored procedures.txt` file to get the stored procedures. Run these in the query tool on PGAdmin for your selected database.
 4. Run `npm run start` to run the API
 
-To test the API use Postman to query the endpoints. To find the names of the elements in the JSON Objects you need to send as parameters you can find them in the controller files. An example is below.
+To test the API use Postman to query the endpoints. To find the names of the elements in the JSON Objects you need to send as parameters you can find them in the controller files. An example for sending a message test is below.
 
 ### Route:
 ```
